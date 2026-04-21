@@ -16,7 +16,7 @@ export default function ContactPage() {
       <PageHero 
         title="Contact Us"
         subtitle="Have a project in mind? Our team is ready to help you find the perfect steel solution."
-        backgroundImage="/abstract-steel-texture-dark-metal.jpg"
+        backgroundImage="/metal-angles-steel-profiles-warehouse.jpg"
         stats={[{ label: "GET IN TOUCH" }, { label: "EXPERT ADVICE" }, { label: "QUICK RESPONSE" }]}
       />
 

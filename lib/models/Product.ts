@@ -31,6 +31,7 @@ export interface IProduct extends Document {
     publicId: string
   }>
   isPublished: boolean
+  showInFooter: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -63,6 +64,7 @@ const ProductSchema = new Schema<IProduct>(
       },
     ],
     isPublished: { type: Boolean, default: true },
+    showInFooter: { type: Boolean, default: false },
   },
   { timestamps: true }
 )

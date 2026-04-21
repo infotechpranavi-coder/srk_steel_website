@@ -38,16 +38,8 @@ export default function CategoriesIndexPage() {
 
   return (
     <div>
-
-      <PageHero 
-        title="Product Divisions"
-        subtitle="Browse through our specialized industrial steel divisions to find exactly what your project needs."
-        backgroundImage="/industrial-steel-factory-beams-dark-cinematic.jpg"
-        stats={[{ label: "GLOBAL DELIVERY" }, { label: "PRECISION CUTTING" }, { label: "MULTI-SECTOR" }]}
-      />
-
       {/* Categories Grid */}
-      <section className="py-24 bg-gray-50 flex-grow">
+      <section className="py-24 bg-gray-50 flex-grow pt-32">
         <div className="container mx-auto px-4 md:px-6">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">

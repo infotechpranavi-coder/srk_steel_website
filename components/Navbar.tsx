@@ -3,13 +3,49 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, ArrowRight, ChevronDown, Search } from "lucide-react"
+import {
+  Menu,
+  X,
+  Search,
+  Phone,
+  MessageSquare,
+  MessageCircle,
+  FileText,
+  Mail,
+  ChevronRight,
+  ChevronDown,
+  LayoutGrid,
+  Settings,
+  Shield,
+  Truck,
+  Wrench,
+  Container,
+  Component,
+  Hash,
+  Activity
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 type Category = {
-  _id: string; name: string; slug: string; image?: { url: string }
+  _id: string;
+  name: string;
+  slug: string;
+  image?: { url: string };
   subcategories?: { name: string; slug: string }[]
+}
+
+const CATEGORY_ICONS: Record<string, any> = {
+  "TMT Bars": Hash,
+  "Structural Steel": Container,
+  "Steel Pipes": Activity,
+  "Sheets & Plates": LayoutGrid,
+  "Wire Rods": Component,
+  "Bolts": Settings,
+  "Nuts": Settings,
+  "Washers": Shield,
+  "Screws": Wrench,
 }
 
 export function Navbar() {
@@ -17,8 +53,8 @@ export function Navbar() {
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
-  const [scrolled, setScrolled] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [scrolled, setScrolled] = useState(false)
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -32,7 +68,7 @@ export function Navbar() {
 
   useEffect(() => {
     fetchCategories()
-    const handleScroll = () => setScrolled(window.scrollY > 20)
+    const handleScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [fetchCategories])
@@ -45,7 +81,7 @@ export function Navbar() {
     }
   }
 
-  const mainLinks = [
+  const topLinks = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
     { name: "Categories", href: "/categories" },
@@ -54,159 +90,230 @@ export function Navbar() {
     { name: "Contact", href: "/contact" },
   ]
 
+  const contactButtons = [
+    { label: "+91 91523 41656", icon: Phone, href: "tel:+919152341656" },
+    { label: "WhatsApp", icon: MessageCircle, href: "https://wa.me/919152341656" },
+    { label: "Enquiry Form", icon: FileText, href: "/contact" },
+    { label: "sales@srksteel.com", icon: Mail, href: "mailto:sales@srksteel.com" },
+  ]
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 shadow-lg backdrop-blur-md h-auto" : "bg-white h-auto border-b border-gray-100"}`}>
-      {/* Upper Row: Logo and Main Nav */}
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 md:w-10 md:h-10 bg-primary flex items-center justify-center transform group-hover:rotate-45 transition-transform duration-300 shadow-lg shadow-primary/20">
-              <span className="text-white font-black text-lg md:text-xl">S</span>
-            </div>
-            <span className="text-xl md:text-2xl font-black tracking-tighter text-[#0c2340] uppercase">
-              SRK<span className="text-primary italic">STEEL</span>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "shadow-2xl" : ""}`}>
+      {/* 1. TOP BAR - Announcement & Secondary Links */}
+      <div className="bg-primary text-white py-2 px-4 md:px-6">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
+              Celebrating 25+ Years Of Industrial Excellence
             </span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6">
+            {topLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="relative group py-1"
+              >
+                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
+                  pathname === link.href ? "text-white" : "text-white/70 group-hover:text-white"
+                }`}>
+                  {link.name}
+                </span>
+                {pathname === link.href ? (
+                  <motion.div
+                    layoutId="activeTopTab"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                ) : (
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white/40 group-hover:w-full transition-all duration-300" />
+                )}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* 2. MAIN NAV - Logo, Search, Contacts */}
+      <div className="bg-white py-1 px-4 md:px-6 border-b border-gray-100">
+        <div className="container mx-auto flex items-center justify-between gap-8">
+          {/* Logo */}
+          <Link href="/" className="flex items-center shrink-0 group">
+            <div className="relative w-40 h-16 md:w-64 md:h-20 transform group-hover:scale-105 transition-transform duration-300">
+              <Image 
+                src="/srk_steel%20logo.jpeg"
+                alt="SRK Steel Logo"
+                fill
+                className="object-contain object-left"
+                priority
+              />
+            </div>
           </Link>
 
-          {/* Desktop Main Nav */}
-          <nav className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-8 h-full border-r border-gray-100 pr-8 mr-2">
-              {mainLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="relative group py-2"
-                >
-                  <span className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${
-                    pathname === link.href ? "text-primary" : "text-gray-400 group-hover:text-primary"
-                  }`}>
-                    {link.name}
-                  </span>
-                  {(pathname === link.href) ? (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  ) : (
-                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary/40 group-hover:w-full transition-all duration-300" />
-                  )}
-                </Link>
-              ))}
-            </div>
-
-            {/* Tactical Search Bar */}
-            <form onSubmit={handleSearch} className="relative group">
+          {/* Search Bar - Desktop */}
+          <div className="hidden lg:flex flex-1 max-w-2xl relative">
+            <form onSubmit={handleSearch} className="w-full relative group">
               <input
                 type="text"
-                placeholder="SEARCH CATALOGUE..."
+                placeholder="Search by product name, grade, standard..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-gray-50 border border-gray-100 px-4 pl-10 h-11 w-[180px] text-[10px] font-bold focus:w-[260px] focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all duration-300 rounded-none italic"
+                className="w-full bg-gray-50 border-2 border-gray-100 px-6 pr-12 h-14 text-sm font-medium focus:ring-0 focus:border-primary outline-none transition-all rounded-md italic"
               />
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+              <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-primary transition-colors">
+                <Search className="w-5 h-5" />
+              </button>
             </form>
+          </div>
 
-            <Button className="bg-primary hover:bg-neutral-900 text-white rounded-none h-11 px-8 text-[11px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 flex items-center gap-3 transition-all">
-              <span>Get a Quote</span>
-              <ArrowRight className="w-4 h-4 animate-pulse" />
-            </Button>
-          </nav>
+          {/* Contact Actions - Desktop */}
+          <div className="hidden xl:flex items-center gap-2">
+            {contactButtons.map((btn, idx) => (
+              <Link key={idx} href={btn.href}>
+                <Button className="bg-primary hover:bg-neutral-900 text-white rounded-lg h-12 px-4 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-md shadow-primary/10">
+                  <btn.icon className="w-4 h-4 shrink-0" />
+                  <span className="whitespace-nowrap">{btn.label}</span>
+                </Button>
+              </Link>
+            ))}
+          </div>
 
           {/* Mobile Toggle */}
-          <button className="md:hidden p-2 text-[#0c2340]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          <button className="lg:hidden p-2 text-[#1a1a1a]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
           </button>
         </div>
       </div>
 
-      {/* Lower Row: Category Tab Bar (Desktop Only) - Industrial Contrast */}
-      <div className="hidden md:block bg-black border-y border-white/5 py-3 shadow-2xl">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex flex-wrap items-center gap-x-12 gap-y-3 justify-center">
-            {categories.map((cat) => (
-              <div key={cat._id} className="relative group">
-                <Link
-                  href={`/categories/${cat.slug}`}
-                  className="flex items-center gap-2 text-[10px] font-black text-primary hover:text-white whitespace-nowrap uppercase tracking-[0.2em] transition-all py-1 cursor-pointer"
-                >
-                  {cat.name}
-                  {cat.subcategories && cat.subcategories.length > 0 && (
-                    <ChevronDown className="w-3 h-3 text-red-500/50 group-hover:text-white transition-colors" />
-                  )}
-                </Link>
+      {/* 3. CATEGORY BAR - All Products & Quick Categories */}
+      <div className="hidden lg:block bg-primary text-white py-3 shadow-inner">
+        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Link 
+              href="/products" 
+              className="group flex items-center gap-2 px-6 py-1 border-r border-white/20 mr-4 hover:text-white/80 transition-colors"
+            >
+              <span className="text-[11px] font-black uppercase tracking-[0.2em]">All Products</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
 
-                {/* Subcategories Dropdown Modal - Industrial Contrast */}
-                {cat.subcategories && cat.subcategories.length > 0 && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
-                    <div className="bg-black border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,1)] p-4 min-w-[240px] space-y-1">
-                      {cat.subcategories.map((sub: any) => (
-                        <Link
-                          key={sub.name}
-                          href={`/categories/${cat.slug}?sub=${sub.slug}`}
-                          className="block text-[10px] font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-none px-4 py-3 transition-all uppercase tracking-widest border-b border-white/5 last:border-0"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
+            <nav className="flex items-center gap-8">
+              {categories.slice(0, 8).map((cat) => {
+                const Icon = CATEGORY_ICONS[cat.name] || Component
+                return (
+                  <div key={cat._id} className="relative group">
+                    <Link
+                      href={`/categories/${cat.slug}`}
+                      className="flex items-center gap-2 text-[10px] font-black text-white/90 hover:text-white uppercase tracking-[0.15em] transition-all py-1.5"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
+                      {cat.name}
+                      {cat.subcategories && cat.subcategories.length > 0 && (
+                        <ChevronDown className="w-3 h-3 opacity-50 group-hover:opacity-100" />
+                      )}
+                    </Link>
+                    
+                    {/* Submenu */}
+                    {cat.subcategories && cat.subcategories.length > 0 && (
+                      <div className="absolute top-full left-0 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                        <div className="bg-white border border-gray-100 shadow-2xl p-3 min-w-[220px] rounded-lg">
+                          {cat.subcategories.map((sub: any) => (
+                            <Link
+                              key={sub.name}
+                              href={`/categories/${cat.slug}?sub=${sub.slug}`}
+                              className="block text-[10px] font-bold text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md px-4 py-3 transition-all uppercase tracking-widest border-b border-gray-50 last:border-0"
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                )
+              })}
+            </nav>
           </div>
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* MOBILE NAV OVERLAY */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-100"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            className="fixed inset-0 bg-white z-[60] flex flex-col md:hidden"
           >
-            <div className="container px-4 py-8 flex flex-col gap-6">
+            {/* Mobile Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+               <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center">
+                <div className="relative w-40 h-16">
+                  <Image 
+                    src="/srk_steel%20logo.jpeg"
+                    alt="SRK Steel Logo"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
+              </Link>
+              <button onClick={() => setIsMenuOpen(false)} className="p-2"><X className="w-8 h-8" /></button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-8">
               {/* Mobile Search */}
               <form onSubmit={handleSearch} className="relative">
                 <input
                   type="text"
-                  placeholder="SEARCH PRODUCTS..."
+                  placeholder="SEARCH CATALOGUE..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-100 px-4 pl-12 h-14 text-sm font-bold focus:ring-1 focus:ring-primary outline-none italic uppercase"
+                  className="w-full bg-gray-50 border-2 border-gray-100 px-6 pr-14 h-16 text-sm font-bold focus:border-primary outline-none italic uppercase rounded-lg"
                 />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400">
+                  <Search className="w-6 h-6" />
+                </button>
               </form>
 
-              {mainLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-2xl font-black text-[#0c2340] uppercase tracking-tighter"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              
-              <div className="pt-8 border-t border-gray-100 space-y-4">
-                <span className="text-primary font-bold tracking-widest uppercase text-xs">Our Divisions</span>
-                <div className="grid grid-cols-1 gap-4">
-                  {categories.map((cat) => (
+              {/* Mobile Links */}
+              <div className="space-y-4">
+                <span className="text-primary font-black tracking-widest uppercase text-[10px]">Navigate Site</span>
+                <nav className="flex flex-col gap-4">
+                  {topLinks.map((link) => (
                     <Link
-                      key={cat._id}
-                      href={`/categories/${cat.slug}`}
-                      className="text-lg font-bold text-gray-500 hover:text-primary"
+                      key={link.name}
+                      href={link.href}
+                      className="text-2xl font-black text-[#1a1a1a] uppercase tracking-tighter"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {cat.name}
+                      {link.name}
                     </Link>
                   ))}
-                </div>
+                  <Link
+                    href="/products"
+                    className="text-2xl font-black text-[#1a1a1a] uppercase tracking-tighter"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    All Products
+                  </Link>
+                </nav>
               </div>
-              <Button className="bg-primary text-white w-full h-14 text-lg font-black uppercase tracking-widest rounded-none shadow-lg shadow-primary/20">Get a Quote</Button>
+
+              {/* Mobile Contact */}
+              <div className="space-y-4 pt-6 border-t border-gray-100">
+                 <span className="text-primary font-black tracking-widest uppercase text-[10px]">Instant Connection</span>
+                 <div className="grid grid-cols-1 gap-3">
+                   {contactButtons.map((btn, idx) => (
+                     <Link key={idx} href={btn.href} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg group">
+                        <div className="w-10 h-10 bg-primary text-white flex items-center justify-center rounded-md">
+                          <btn.icon className="w-5 h-5" />
+                        </div>
+                        <span className="font-bold text-sm text-[#1a1a1a]">{btn.label}</span>
+                     </Link>
+                   ))}
+                 </div>
+              </div>
             </div>
           </motion.div>
         )}

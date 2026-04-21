@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 
 type SubCategory = { _id: string; name: string; slug: string }
 type Category = { _id: string; name: string; slug: string; subcategories: SubCategory[] }
@@ -50,6 +51,7 @@ export default function DashboardProducts() {
   const [formPrice, setFormPrice] = useState("")
   const [formStock, setFormStock] = useState("")
   const [formDescription, setFormDescription] = useState("")
+  const [formShowInFooter, setFormShowInFooter] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -79,10 +81,11 @@ export default function DashboardProducts() {
     if (file) setImagePreview(URL.createObjectURL(file))
   }
 
-  const resetForm = () => {
+    const resetForm = () => {
     setFormTitle(""); setFormSpecs(""); setFormDescription("")
     setFormPrice(""); setFormStock("")
     setSelectedMainCategory(""); setSelectedSubCategory("")
+    setFormShowInFooter(false)
     setImagePreview(null)
     if (fileRef.current) fileRef.current.value = ""
   }
@@ -99,6 +102,7 @@ export default function DashboardProducts() {
       fd.append("description", formDescription)
       fd.append("price", formPrice)
       fd.append("stock", formStock)
+      fd.append("showInFooter", formShowInFooter.toString())
       if (fileRef.current?.files?.[0]) fd.append("image", fileRef.current.files[0])
 
       const res = await fetch("/api/products", { method: "POST", body: fd })
@@ -206,10 +210,21 @@ export default function DashboardProducts() {
                 </div>
               </div>
 
-              {/* Description */}
-              <div className="space-y-2">
-                <Label htmlFor="description">Detailed Description</Label>
-                <Textarea id="description" value={formDescription} onChange={e => setFormDescription(e.target.value)} placeholder="Describe the industrial applications and metallurgical properties..." className="rounded-none border-gray-200 min-h-[100px]" />
+              {/* Description & Footer Toggle */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="description">Detailed Description</Label>
+                  <Textarea id="description" value={formDescription} onChange={e => setFormDescription(e.target.value)} placeholder="Describe the industrial applications and metallurgical properties..." className="rounded-none border-gray-200 min-h-[100px]" />
+                </div>
+                <div className="space-y-2 pt-6">
+                  <div className="flex items-center space-x-2 bg-gray-50 p-4 border border-gray-100">
+                    <Checkbox id="showInFooter" checked={formShowInFooter} onCheckedChange={(c) => setFormShowInFooter(c as boolean)} />
+                    <Label htmlFor="showInFooter" className="font-medium cursor-pointer">
+                      Show in Footer
+                    </Label>
+                  </div>
+                  <p className="text-xs text-gray-500 italic mt-1 pl-2">If checked, this product will be highlighted under "Industrial Products" in the footer.</p>
+                </div>
               </div>
 
               {/* Image Upload */}

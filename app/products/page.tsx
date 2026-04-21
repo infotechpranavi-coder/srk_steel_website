@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import { ArrowRight, Search, Loader2 } from "lucide-react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PageHero } from "@/components/PageHero"
@@ -24,12 +25,20 @@ type Product = {
 
 const FALLBACK_IMAGE = "/steel-beams-construction-metal-stack.jpg"
 
-export default function ProductsPage() {
+function ProductsContent() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchQuery, setSearchQuery] = useState("")
   const [categories, setCategories] = useState<string[]>(["All"])
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const search = searchParams.get("search")
+    if (search) {
+      setSearchQuery(search)
+    }
+  }, [searchParams])
 
   const fetchProducts = useCallback(async () => {
     setLoading(true)
@@ -60,13 +69,6 @@ export default function ProductsPage() {
   return (
     <div>
 
-      <PageHero 
-        title="Our Catalogue"
-        subtitle="Discover our comprehensive range of steel solutions engineered for strength, durability, and precision."
-        backgroundImage="/industrial-steel-factory-beams-dark-cinematic.jpg"
-        stats={[{ label: "INDUSTRIAL SCALE" }, { label: "CERTIFIED QUALITY" }, { label: "EXPERT FABRICATION" }]}
-      />
-
       {/* Main Catalogue Layout */}
       <section className="py-24 bg-gray-50 flex-grow pt-32">
         <div className="container mx-auto px-4 md:px-6">
@@ -85,7 +87,7 @@ export default function ProductsPage() {
                     onClick={() => setActiveCategory("All")}
                     className={`text-left px-5 py-4 text-xs font-bold uppercase tracking-wider transition-colors border ${
                       activeCategory === "All"
-                        ? "bg-[#D32F2F] text-white border-[#D32F2F] shadow-sm"
+                        ? "bg-[#a02222] text-white border-[#a02222] shadow-sm"
                         : "bg-[#FAFAFA] text-[#333333] border-gray-200 hover:bg-white hover:text-primary hover:border-primary"
                     }`}
                   >
@@ -97,7 +99,7 @@ export default function ProductsPage() {
                       onClick={() => setActiveCategory(category)}
                       className={`text-left px-5 py-4 text-xs font-bold uppercase tracking-wider transition-colors border ${
                         activeCategory === category
-                          ? "bg-[#D32F2F] text-white border-[#D32F2F] shadow-sm"
+                          ? "bg-[#a02222] text-white border-[#a02222] shadow-sm"
                           : "bg-[#FAFAFA] text-[#333333] border-gray-200 hover:bg-white hover:text-primary hover:border-primary"
                       }`}
                     >
@@ -155,40 +157,64 @@ export default function ProductsPage() {
                   <Button variant="link" onClick={() => { setSearchQuery(""); setActiveCategory("All") }} className="text-primary font-bold">Clear all filters</Button>
                 </div>
               ) : (
-                <div className="max-w-full">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-                    {filteredProducts.map((product, index) => (
-                      <motion.div
-                        key={product._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.03 }}
-                        className="group cursor-pointer bg-white border border-gray-200 hover:shadow-lg transition-all flex flex-col overflow-hidden"
-                      >
-                        <Link href={`/package/${product.slug}`} className="flex flex-col h-full relative">
-                          <div className="relative overflow-hidden bg-gray-100 aspect-square shrink-0 border-b border-gray-100">
-                            <Image
-                              src={product.image?.url || FALLBACK_IMAGE}
-                              alt={product.title}
-                              fill
-                              className="object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                          </div>
+                <div className="space-y-16">
+                  {/* Group products by Subcategory if category is selected, or by Main Category if "All" is active */}
+                  {Object.entries(
+                    filteredProducts.reduce((acc, p) => {
+                      const groupKey = activeCategory === "All" ? p.mainCategory : (p.subCategory || "General Products")
+                      if (!acc[groupKey]) acc[groupKey] = []
+                      acc[groupKey].push(p)
+                      return acc
+                    }, {} as Record<string, Product[]>)
+                  ).map(([groupName, groupProducts]) => (
+                    <div key={groupName} className="scroll-mt-32">
+                      <div className="flex items-center gap-4 mb-8">
+                        <h3 className="text-xl font-black text-[#0c2340] uppercase tracking-tight whitespace-nowrap">
+                          {groupName}
+                        </h3>
+                        <div className="h-[1px] w-full bg-gray-200" />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {groupProducts.map((product, index) => (
+                          <motion.div
+                            key={product._id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.03 }}
+                            className="group cursor-pointer bg-white border border-gray-200 hover:shadow-xl transition-all flex flex-col overflow-hidden"
+                          >
+                            <Link href={`/package/${product.slug}`} className="flex flex-col h-full relative">
+                              <div className="relative overflow-hidden bg-gray-100 aspect-square shrink-0 border-b border-gray-100">
+                                <Image
+                                  src={product.image?.url || FALLBACK_IMAGE}
+                                  alt={product.title}
+                                  fill
+                                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300" />
+                              </div>
 
-                          <div className="p-4 md:p-5 flex flex-col flex-grow relative bg-white">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                            
-                            <span className="text-primary font-bold tracking-[0.2em] uppercase text-[9px] mb-1.5 block">
-                              {product.mainCategory?.replace('Steel', '') || 'MAIN'}
-                            </span>
-                            <h3 className="text-lg font-extrabold text-[#0c2340] group-hover:text-primary transition-colors leading-tight">
-                              {product.title.toLowerCase()}
-                            </h3>
-                          </div>
-                        </Link>
-                      </motion.div>
-                    ))}
-                  </div>
+                              <div className="p-5 flex flex-col flex-grow relative bg-white">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+                                
+                                <span className="text-primary font-bold tracking-[0.2em] uppercase text-[9px] mb-2 block">
+                                  {product.mainCategory?.toUpperCase()}
+                                </span>
+                                <h3 className="text-base font-black text-[#0c2340] group-hover:text-primary transition-colors leading-snug uppercase tracking-tight">
+                                  {product.title}
+                                </h3>
+                                <div className="mt-4 flex items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest gap-2">
+                                  <span>View Details</span>
+                                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform text-primary" />
+                                </div>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -196,20 +222,19 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gray-900">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Can&apos;t Find What You&apos;re Looking For?</h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-            Our team can help you find the perfect steel solution for your specific requirements.
-          </p>
-          <Link href="/contact">
-            <Button size="lg" className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-8">
-              Contact Our Experts
-            </Button>
-          </Link>
-        </div>
-      </section>
     </div>
+  )
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 flex-col gap-4">
+        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Initializing Catalogue...</p>
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   )
 }

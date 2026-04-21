@@ -82,7 +82,7 @@ export default function Home() {
     <div className="overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900 pt-20">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900">
         <AnimatePresence mode="wait">
           {banners.length > 0 ? (
             <motion.div
@@ -97,10 +97,9 @@ export default function Home() {
                 src={banners[currentSlide]?.image?.url || "/industrial-steel-factory-beams-dark-cinematic.jpg"}
                 alt={banners[currentSlide]?.title}
                 fill
-                className="object-cover opacity-50 transition-transform duration-[10000ms] scale-110"
+                className="object-cover transition-transform duration-[10000ms] scale-110"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
               
               <div className="container relative z-10 px-4 md:px-6 h-full flex items-center">
                 <motion.div initial="initial" animate="animate" variants={staggerContainer} className="max-w-4xl">
@@ -129,7 +128,7 @@ export default function Home() {
 
                   <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4">
                     <Link href={banners[currentSlide]?.ctaLink || "/products"}>
-                      <Button size="lg" className="bg-primary hover:bg-red-700 text-white rounded-none h-14 px-8 text-lg group w-full sm:w-auto">
+                      <Button size="lg" className="bg-primary hover:bg-neutral-900 text-white rounded-none h-14 px-8 text-lg group w-full sm:w-auto">
                         {banners[currentSlide]?.ctaText}
                         <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                       </Button>
@@ -144,10 +143,9 @@ export default function Home() {
                  src="/industrial-steel-factory-beams-dark-cinematic.jpg"
                  alt="Fallback Hero"
                  fill
-                 className="object-cover opacity-50"
+                 className="object-cover"
                  priority
                />
-               <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent" />
             </div>
           )}
         </AnimatePresence>
@@ -349,7 +347,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-gray-100 rounded-full z-0" />
-              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-red-50 rounded-full z-0" />
+              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-primary/5 rounded-full z-0" />
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -403,7 +401,7 @@ export default function Home() {
                     transition={{ delay: idx * 0.1 }}
                     className="flex flex-col gap-3 group"
                   >
-                    <div className="w-12 h-12 bg-red-50 text-primary flex items-center justify-center transition-colors group-hover:bg-primary group-hover:text-white">
+                    <div className="w-12 h-12 bg-primary/10 text-primary flex items-center justify-center transition-colors group-hover:bg-primary group-hover:text-white">
                       <feature.icon className="w-6 h-6" />
                     </div>
                     <h4 className="font-bold text-xl text-gray-900 uppercase tracking-tighter">{feature.title}</h4>
@@ -434,7 +432,7 @@ export default function Home() {
                 </h2>
               </div>
               
-              <div className="space-y-6 text-gray-600 leading-relaxed max-w-xl italic border-l-2 border-red-500/20 pl-8">
+              <div className="space-y-6 text-gray-600 leading-relaxed max-w-xl italic border-l-2 border-primary/20 pl-8">
                 <p>
                   Established in 1998, SRK Steel started as a specialized trading business dealing in a range of higher-grade structural components such as TMT bars, structural beams, and precision MS pipes.
                 </p>
@@ -476,59 +474,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section - Tightened Industrial Command Center */}
-      <section className="py-20 bg-black relative overflow-hidden border-t border-white/5">
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          <Image
-            src="/abstract-steel-texture-dark-metal.jpg"
-            alt="Metal texture"
-            fill
-            className="object-cover opacity-30 scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
-        </div>
-        
-        <div className="container mx-auto relative z-10 px-4 md:px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto bg-white/5 backdrop-blur-3xl border border-white/10 p-10 md:p-14 text-center shadow-[0_40px_100px_rgba(0,0,0,0.8)] group"
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 mb-6">
-              <span className="w-1.5 h-1.5 bg-primary animate-pulse" />
-              <span className="text-primary text-[9px] font-black uppercase tracking-[0.3em]">Project Enquiry Active</span>
-            </div>
-
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-[0.9] group-hover:scale-[1.01] transition-transform duration-500">
-              Ready to Build <br /> 
-              <span className="text-primary">Stronger Structures?</span>
-            </h2>
-            
-            <p className="text-base md:text-lg text-gray-400 mb-10 max-w-lg mx-auto font-medium leading-relaxed italic border-l-2 border-primary/20 pl-6">
-              "Standardized precision meets industrial scale. Deploy SRK Steel 
-              for your next critical infrastructure project."
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <Link href="/contact">
-                <Button className="bg-primary hover:bg-white hover:text-primary text-white rounded-none h-14 px-10 text-[11px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-3">
-                  <span>Initialize Quote</span>
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  variant="outline"
-                  className="bg-white/5 border-white/20 text-white hover:bg-white hover:text-black rounded-none h-14 px-10 text-[11px] font-black uppercase tracking-[0.2em] transition-all"
-                >
-                  Contact Technical Sales
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   )
 }

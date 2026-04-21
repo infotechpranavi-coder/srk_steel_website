@@ -78,13 +78,6 @@ export default function CategoryClientPage({ slug }: { slug: string }) {
 
   return (
     <div>
-      <PageHero 
-        title={category.name}
-        subtitle={category.description || `Explore our premium range of ${category.name.toLowerCase()} products designed for high-performance industrial applications.`}
-        backgroundImage={category.image?.url || FALLBACK_IMAGE}
-        stats={[{ label: "PREMIUM GRADE" }, { label: "CUSTOM SIZING" }, { label: "BULK SUPPLY" }]}
-      />
-
       <main className="flex-grow pt-24 pb-32 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col lg:flex-row gap-8 min-h-[800px]">

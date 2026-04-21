@@ -13,7 +13,7 @@ export function SiteWrapper({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col min-h-screen">
       {!isDashboard && <Navbar />}
       {!isDashboard && <QuickAccess />}
-      <main className="flex-grow">
+      <main className={`flex-grow ${!isDashboard ? "pt-[110px] lg:pt-[180px]" : ""}`}>
         {children}
       </main>
       {!isDashboard && <Footer />}

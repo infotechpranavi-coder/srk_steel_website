@@ -39,7 +39,7 @@ export default function DashboardOverview() {
           <Button variant="outline" className="rounded-none border-gray-200">
             Download Report
           </Button>
-          <Button className="bg-primary hover:bg-red-700 text-white rounded-none">
+          <Button className="bg-primary hover:bg-primary/90 text-white rounded-none">
             New Product
           </Button>
         </div>

@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
     const price = formData.get("price") as string | null
     const stock = formData.get("stock") as string | null
     const imageFile = formData.get("image") as File | null
+    const showInFooter = formData.get("showInFooter") === "true"
 
     if (!title || !mainCategory) {
       return NextResponse.json(
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
       price: price || "",
       stock: stock || "",
       image: imageData,
+      showInFooter,
     })
 
     return NextResponse.json({ success: true, data: product }, { status: 201 })

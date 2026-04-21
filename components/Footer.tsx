@@ -1,99 +1,121 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import { MapPin, Phone, Mail } from "lucide-react"
+
+type FooterProduct = { _id: string; title: string; slug: string; showInFooter: boolean }
 
 export function Footer() {
+  const [footerProducts, setFooterProducts] = useState<FooterProduct[]>([])
+
+  useEffect(() => {
+    const fetchFooterProducts = async () => {
+      try {
+        const res = await fetch("/api/products")
+        const json = await res.json()
+        if (json.success) {
+          const featured = json.data.filter((p: FooterProduct) => p.showInFooter)
+          setFooterProducts(featured)
+        }
+      } catch (e) {
+        console.error("Failed to load footer products", e)
+      }
+    }
+    fetchFooterProducts()
+  }, [])
+
   return (
     <footer className="bg-black border-t border-white/5 pt-24 pb-12">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="space-y-6">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10 bg-primary flex items-center justify-center transform group-hover:rotate-45 transition-transform duration-300">
-                <span className="text-white font-black text-xl">S</span>
+            <Link href="/" className="block group">
+              <div className="relative w-64 h-32 transition-all duration-300">
+                <Image 
+                  src="/srk_steel%20logo.jpeg"
+                  alt="SRK Steel Logo"
+                  fill
+                  className="object-contain object-left"
+                />
               </div>
-              <span className="text-2xl font-black text-white uppercase tracking-tighter">
-                SRK<span className="text-primary italic">STEEL</span>
-              </span>
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs italic">
-              Premium steel solutions for construction, infrastructure, and industrial applications. 
-              Building the world with strength and integrity since 1998.
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xs font-medium italic">
+              Premium industrial steel solutions engineered for strength, durability, and precision. 
+              Serving construction and infrastructure sectors since 1998.
             </p>
           </div>
 
           <div>
             <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Industrial Products</h4>
             <ul className="space-y-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-              <li>
-                <Link href="/products/tmt-bars" className="hover:text-primary transition-colors">
-                  TMT Bars
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/structural-steel" className="hover:text-primary transition-colors">
-                  Structural Steel
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/steel-pipes" className="hover:text-primary transition-colors">
-                  Steel Pipes & Tubes
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/steel-sheets-plates" className="hover:text-primary transition-colors">
-                  Sheets & Plates
-                </Link>
-              </li>
-              <li>
-                <Link href="/products/wire-rods" className="hover:text-primary transition-colors">
-                  Wire Rods & Coils
-                </Link>
-              </li>
+              {footerProducts.length > 0 ? (
+                footerProducts.map(product => (
+                  <li key={product._id}>
+                    <Link href={`/package/${product.slug}`} className="hover:text-primary transition-colors">
+                      {product.title}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <span className="text-gray-600">No featured products</span>
+                </li>
+              )}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Company Divisions</h4>
+            <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Explore Site</h4>
             <ul className="space-y-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
               <li>
-                <Link href="/about" className="hover:text-primary transition-colors">
-                  Our Story
+                <Link href="/" className="hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="hover:text-primary transition-colors">
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link href="/categories" className="hover:text-primary transition-colors">
+                  Categories
                 </Link>
               </li>
               <li>
                 <Link href="/services" className="hover:text-primary transition-colors">
-                  Our Services
+                  Services
                 </Link>
               </li>
               <li>
-                <Link href="/projects" className="hover:text-primary transition-colors">
-                  Featured Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/about#milestones" className="hover:text-primary transition-colors">
-                  Milestones
+                <Link href="/about" className="hover:text-primary transition-colors">
+                  About
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="hover:text-primary transition-colors">
-                  Contact Us
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Headquarters</h4>
-            <ul className="space-y-6 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-              <li className="flex flex-col gap-2">
-                <span className="text-white font-black text-xs tracking-tighter">Registered Office</span>
+            <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Get in Touch</h4>
+            <ul className="space-y-5 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span className="leading-relaxed">123 Industrial Area, Phase 4, Steel City, SC 54321</span>
               </li>
-              <li className="flex flex-col gap-2">
-                <span className="text-white font-black text-xs tracking-tighter">Direct Contact</span>
-                <span className="leading-relaxed">+1 (555) 123-4567 • sales@srksteel.com</span>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-primary shrink-0" />
+                <span className="leading-relaxed">+1 (555) 123-4567</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-primary shrink-0" />
+                <span className="leading-relaxed text-white">sales@srksteel.com</span>
               </li>
             </ul>
           </div>

@@ -44,7 +44,7 @@ export default function AboutPage() {
       <PageHero 
         title="Our Mission"
         subtitle="Strength isn't just about steel. It's about reliability, integrity, and building a foundation that lasts for generations."
-        backgroundImage="/industrial-steel-factory-beams-dark-cinematic.jpg"
+        backgroundImage="/rolled-steel-metal-sheets-factory.jpg"
         stats={[{ label: "25+ YEARS EXPERIENCE" }, { label: "INNOVATION DRIVEN" }, { label: "GLOBAL FOOTPRINT" }]}
       />
 

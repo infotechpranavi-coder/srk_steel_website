@@ -110,13 +110,6 @@ export default function ProductDetailPage() {
 
   return (
     <div>
-      <PageHero 
-        title={product.title}
-        subtitle={product.description}
-        backgroundImage={product.image || "/steel-beams-construction-metal-stack.jpg"}
-        stats={[{ label: product.category.toUpperCase() }, { label: "PREMIUM GRADE" }, { label: "TECH SUPPORT ACTIVE" }]}
-      />
-
       <main className="flex-grow pt-16 pb-24">
         <div className="container mx-auto px-4 md:px-6">
           <Link href="/products" className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary mb-8 transition-colors group">
