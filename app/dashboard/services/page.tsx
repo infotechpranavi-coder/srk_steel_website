@@ -89,7 +89,7 @@ export default function DashboardServices() {
         
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-6 flex items-center gap-2">
+            <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-6 flex items-center gap-2">
               <Plus className="w-5 h-5" />
               Add New Service
             </Button>
@@ -164,7 +164,7 @@ export default function DashboardServices() {
                 </TableCell>
                 <TableCell className="max-w-[300px]">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-red-50 text-primary flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-primary-muted text-primary flex items-center justify-center shrink-0">
                       <service.icon className="w-5 h-5" />
                     </div>
                     <div>
@@ -195,7 +195,7 @@ export default function DashboardServices() {
                     <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="hover:text-red-600 transition-colors">
+                    <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -261,3 +261,4 @@ export default function DashboardServices() {
     </div>
   )
 }
+

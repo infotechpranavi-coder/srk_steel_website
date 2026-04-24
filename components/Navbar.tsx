@@ -99,43 +99,8 @@ export function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "shadow-2xl" : ""}`}>
-      {/* 1. TOP BAR - Announcement & Secondary Links */}
-      <div className="bg-primary text-white py-2 px-4 md:px-6">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">
-              Celebrating 25+ Years Of Industrial Excellence
-            </span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            {topLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="relative group py-1"
-              >
-                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${
-                  pathname === link.href ? "text-white" : "text-white/70 group-hover:text-white"
-                }`}>
-                  {link.name}
-                </span>
-                {pathname === link.href ? (
-                  <motion.div
-                    layoutId="activeTopTab"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-white"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                ) : (
-                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white/40 group-hover:w-full transition-all duration-300" />
-                )}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* 2. MAIN NAV - Logo, Search, Contacts */}
-      <div className="bg-white py-1 px-4 md:px-6 border-b border-gray-100">
+      {/* MAIN NAV - Logo, Search, Page Tabs */}
+      <div className="bg-white py-2 px-4 md:px-6 border-b border-gray-100">
         <div className="container mx-auto flex items-center justify-between gap-8">
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0 group">
@@ -151,7 +116,7 @@ export function Navbar() {
           </Link>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden lg:flex flex-1 max-w-2xl relative">
+          <div className="hidden lg:flex flex-1 max-w-md relative">
             <form onSubmit={handleSearch} className="w-full relative group">
               <input
                 type="text"
@@ -166,17 +131,31 @@ export function Navbar() {
             </form>
           </div>
 
-          {/* Contact Actions - Desktop */}
-          <div className="hidden xl:flex items-center gap-2">
-            {contactButtons.map((btn, idx) => (
-              <Link key={idx} href={btn.href}>
-                <Button className="bg-primary hover:bg-neutral-900 text-white rounded-lg h-12 px-4 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-md shadow-primary/10">
-                  <btn.icon className="w-4 h-4 shrink-0" />
-                  <span className="whitespace-nowrap">{btn.label}</span>
-                </Button>
+          {/* Page Tabs - Desktop (Moved from Top Bar) */}
+          <nav className="hidden lg:flex items-center gap-4">
+            {topLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="relative group py-2"
+              >
+                <span className={`text-xs font-black uppercase tracking-widest transition-colors ${
+                  pathname === link.href ? "text-primary" : "text-gray-500 hover:text-primary"
+                }`}>
+                  {link.name}
+                </span>
+                {pathname === link.href ? (
+                  <motion.div
+                    layoutId="activeNavTab"
+                    className="absolute -bottom-1 left-0 right-0 h-1 bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                ) : (
+                  <div className="absolute -bottom-1 left-0 w-0 h-1 bg-primary/40 group-hover:w-full transition-all duration-300" />
+                )}
               </Link>
             ))}
-          </div>
+          </nav>
 
           {/* Mobile Toggle */}
           <button className="lg:hidden p-2 text-[#1a1a1a]" onClick={() => setIsMenuOpen(!isMenuOpen)}>

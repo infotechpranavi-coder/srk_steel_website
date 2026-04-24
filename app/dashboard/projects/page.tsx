@@ -91,7 +91,7 @@ export default function DashboardProjects() {
         
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-6 flex items-center gap-2">
+            <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-6 flex items-center gap-2">
               <Plus className="w-5 h-5" />
               New Project Case
             </Button>
@@ -218,7 +218,7 @@ export default function DashboardProjects() {
                       <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
                         <ExternalLink className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="hover:text-red-700 transition-colors">
+                      <Button variant="ghost" size="icon" className="hover:text-primary-hover transition-colors">
                         <Trash2 className="w-4 h-4" />
                       </Button>
                    </div>
@@ -238,3 +238,4 @@ export default function DashboardProjects() {
     </div>
   )
 }
+

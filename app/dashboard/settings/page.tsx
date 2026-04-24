@@ -37,7 +37,7 @@ export default function DashboardSettings() {
               <RefreshCcw className="w-4 h-4"/>
               Reset All
            </Button>
-           <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-8 font-bold flex items-center gap-2">
+           <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-8 font-bold flex items-center gap-2">
               <Save className="w-4 h-4"/>
               Apply Changes
            </Button>
@@ -152,10 +152,10 @@ export default function DashboardSettings() {
         </TabsContent>
 
         <TabsContent value="security" className="space-y-6">
-           <Card className="rounded-none border-gray-100 shadow-sm bg-white max-w-2xl mx-auto border-t-4 border-t-red-700">
+           <Card className="rounded-none border-gray-100 shadow-sm bg-white max-w-2xl mx-auto border-t-4 border-t-primary-hover">
               <CardHeader>
                  <CardTitle className="flex items-center gap-2 text-lg font-bold uppercase tracking-wider text-gray-900">
-                    <Lock className="w-5 h-5 text-red-700"/>
+                    <Lock className="w-5 h-5 text-primary-hover"/>
                     Admin Access Control
                  </CardTitle>
                  <CardDescription>Manage password policy and authentication methods.</CardDescription>
@@ -209,11 +209,11 @@ export default function DashboardSettings() {
                  </div>
                  
                  <div className="pt-8 border-t border-gray-50">
-                    <div className="p-4 bg-red-50/50 border border-red-100 space-y-4">
-                       <h4 className="text-xs font-bold text-red-700 uppercase tracking-wider">Danger Zone</h4>
+                    <div className="p-4 bg-primary-muted/50 border border-primary-muted space-y-4">
+                       <h4 className="text-xs font-bold text-primary-hover uppercase tracking-wider">Danger Zone</h4>
                        <div className="flex justify-between items-center">
-                          <p className="text-xs text-red-600/80">Clear all local cache and rebuild the static site snapshot.</p>
-                          <Button variant="outline" className="rounded-none border-red-200 text-red-700 font-bold text-xs uppercase h-10 px-6 hover:bg-red-700 hover:text-white transition-colors">Wipe Cache</Button>
+                          <p className="text-xs text-primary/80">Clear all local cache and rebuild the static site snapshot.</p>
+                          <Button variant="outline" className="rounded-none border-primary-muted text-primary-hover font-bold text-xs uppercase h-10 px-6 hover:bg-primary-hover hover:text-white transition-colors">Wipe Cache</Button>
                        </div>
                     </div>
                  </div>
@@ -224,3 +224,4 @@ export default function DashboardSettings() {
     </div>
   )
 }
+

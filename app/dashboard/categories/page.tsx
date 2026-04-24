@@ -228,7 +228,7 @@ export default function CategoriesPage() {
           {/* Add Main Category */}
           <Dialog open={isMainDialogOpen} onOpenChange={setIsMainDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-red-700 text-white rounded-none">
+              <Button className="bg-primary hover:bg-primary-hover text-white rounded-none">
                 <Plus className="w-4 h-4 mr-2" /> Main Category
               </Button>
             </DialogTrigger>
@@ -268,7 +268,7 @@ export default function CategoriesPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsMainDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handleAddMainCategory} className="bg-primary hover:bg-red-700 text-white" disabled={saving}>
+                <Button onClick={handleAddMainCategory} className="bg-primary hover:bg-primary-hover text-white" disabled={saving}>
                   {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   Save to Database
                 </Button>
@@ -330,7 +330,7 @@ export default function CategoriesPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsSubDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handleAddSubcategory} className="bg-primary hover:bg-red-700 text-white" disabled={saving}>
+                <Button onClick={handleAddSubcategory} className="bg-primary hover:bg-primary-hover text-white" disabled={saving}>
                   {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   Save to Database
                 </Button>
@@ -381,7 +381,7 @@ export default function CategoriesPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditMainOpen(false)}>Cancel</Button>
-            <Button onClick={handleEditMainCategory} disabled={saving} className="bg-primary hover:bg-red-700 text-white">
+            <Button onClick={handleEditMainCategory} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
               {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               Update Category
             </Button>
@@ -430,7 +430,7 @@ export default function CategoriesPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditSubOpen(false)}>Cancel</Button>
-            <Button onClick={handleEditSubcategory} disabled={saving} className="bg-primary hover:bg-red-700 text-white">
+            <Button onClick={handleEditSubcategory} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
               {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               Update Sub-Category
             </Button>
@@ -488,7 +488,7 @@ export default function CategoriesPage() {
                           <Edit2 className="w-4 h-4" /> Full Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="flex items-center gap-2 text-red-600" onClick={() => handleDeleteCategory(cat._id)}>
+                        <DropdownMenuItem className="flex items-center gap-2 text-primary" onClick={() => handleDeleteCategory(cat._id)}>
                           <Trash2 className="w-4 h-4" /> Delete Entire Category
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -523,7 +523,7 @@ export default function CategoriesPage() {
                               <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-primary" onClick={() => openEditSub(cat._id, sub)}>
                                 <Edit2 className="w-3 h-3" />
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-red-600" onClick={() => handleDeleteSubcategory(cat._id, sub._id)}>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-primary" onClick={() => handleDeleteSubcategory(cat._id, sub._id)}>
                                 <Trash2 className="w-3 h-3" />
                               </Button>
                             </div>
@@ -584,3 +584,4 @@ export default function CategoriesPage() {
     </div>
   )
 }
+

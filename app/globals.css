@@ -6,13 +6,13 @@
 
 :root {
   /* Industrial Red Palette */
-  --primary-red: #a02222; /* New requested brick red */
+  --primary-red: #a02222;
   --primary-red-hover: #801b1b;
 
   /* Neutral Greys */
-  --dark-grey: #1a1a1a; /* Almost black for strong contrast */
-  --mid-grey: #808080; /* Standard metal grey */
-  --light-grey: #f5f5f5; /* Background grey */
+  --dark-grey: #1a1a1a;
+  --mid-grey: #808080;
+  --light-grey: #f5f5f5;
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -20,7 +20,9 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.42 0.17 27); /* Updated brick red in OKLCH */
+  --primary: #a02222;
+  --primary-hover: #801b1b;
+  --primary-muted: #fef2f2;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -28,17 +30,17 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.42 0.17 27);
-  --destructive-foreground: oklch(0.42 0.17 27);
+  --destructive: #a02222;
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.42 0.17 27); /* Red ring */
+  --ring: #a02222;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0rem; /* Industrial square corners */
+  --radius: 0rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -94,6 +96,8 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-muted: var(--primary-muted);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);

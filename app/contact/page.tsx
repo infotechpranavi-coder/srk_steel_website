@@ -68,7 +68,7 @@ export default function ContactPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-red-700 text-white rounded-none h-14 text-lg"
+                  className="w-full bg-primary hover:bg-primary-hover text-white rounded-none h-14 text-lg"
                 >
                   Submit Request
                 </Button>
@@ -170,3 +170,4 @@ export default function ContactPage() {
     </div>
   )
 }
+

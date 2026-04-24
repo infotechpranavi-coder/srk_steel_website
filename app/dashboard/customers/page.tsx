@@ -84,7 +84,7 @@ export default function DashboardCustomers() {
               <Download className="w-4 h-4"/>
               Export CSV
            </Button>
-           <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-8 font-bold">
+           <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-8 font-bold">
               Add New Partner
            </Button>
         </div>
@@ -210,3 +210,4 @@ export default function DashboardCustomers() {
     </div>
   )
 }
+

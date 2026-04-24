@@ -141,7 +141,7 @@ export default function DashboardProducts() {
 
         <Dialog open={isDialogOpen} onOpenChange={(o) => { setIsDialogOpen(o); if (!o) resetForm() }}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-6 flex items-center gap-2">
+            <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-6 flex items-center gap-2">
               <Plus className="w-5 h-5" /> Upload New Product
             </Button>
           </DialogTrigger>
@@ -253,7 +253,7 @@ export default function DashboardProducts() {
               <Button variant="outline" className="rounded-none border-gray-200" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
               <Button
                 onClick={handleSubmit}
-                className="bg-primary hover:bg-red-700 text-white rounded-none px-8"
+                className="bg-primary hover:bg-primary-hover text-white rounded-none px-8"
                 disabled={saving || !formTitle || !selectedMainCategory}
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
@@ -368,7 +368,7 @@ export default function DashboardProducts() {
                       <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
                         <Edit className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="hover:text-red-600 transition-colors" onClick={() => handleDelete(product.slug)}>
+                      <Button variant="ghost" size="icon" className="hover:text-primary transition-colors" onClick={() => handleDelete(product.slug)}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                       <DropdownMenu>
@@ -386,7 +386,7 @@ export default function DashboardProducts() {
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(product.slug)}>Discontinue</DropdownMenuItem>
+                          <DropdownMenuItem className="text-primary" onClick={() => handleDelete(product.slug)}>Discontinue</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
@@ -440,3 +440,4 @@ export default function DashboardProducts() {
     </div>
   )
 }
+

@@ -87,7 +87,7 @@ function ProductsContent() {
                     onClick={() => setActiveCategory("All")}
                     className={`text-left px-5 py-4 text-xs font-bold uppercase tracking-wider transition-colors border ${
                       activeCategory === "All"
-                        ? "bg-[#a02222] text-white border-[#a02222] shadow-sm"
+                        ? "bg-primary text-white border-primary shadow-sm"
                         : "bg-[#FAFAFA] text-[#333333] border-gray-200 hover:bg-white hover:text-primary hover:border-primary"
                     }`}
                   >
@@ -99,7 +99,7 @@ function ProductsContent() {
                       onClick={() => setActiveCategory(category)}
                       className={`text-left px-5 py-4 text-xs font-bold uppercase tracking-wider transition-colors border ${
                         activeCategory === category
-                          ? "bg-[#a02222] text-white border-[#a02222] shadow-sm"
+                          ? "bg-primary text-white border-primary shadow-sm"
                           : "bg-[#FAFAFA] text-[#333333] border-gray-200 hover:bg-white hover:text-primary hover:border-primary"
                       }`}
                     >
@@ -114,7 +114,7 @@ function ProductsContent() {
               <div className="bg-[#0c2340] p-6 text-white text-center">
                 <h4 className="font-bold text-lg mb-2">Need Custom Sizing?</h4>
                 <p className="text-gray-400 text-xs mb-6">Contact our experts for specialized fabrication services.</p>
-                <Link href="/contact" className="inline-block w-full py-3 bg-primary hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest transition-colors">
+                <Link href="/contact" className="inline-block w-full py-3 bg-primary hover:bg-primary-hover text-white font-bold text-xs uppercase tracking-widest transition-colors">
                   Enquire Now
                 </Link>
               </div>
@@ -238,3 +238,4 @@ export default function ProductsPage() {
     </Suspense>
   )
 }
+

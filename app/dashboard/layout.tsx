@@ -100,7 +100,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </SidebarGroup>
           </SidebarContent>
           <SidebarFooter className="p-4 border-t border-gray-100">
-            <Button variant="ghost" className="w-full justify-start gap-3 text-red-600 hover:bg-red-50 hover:text-red-700">
+            <Button variant="ghost" className="w-full justify-start gap-3 text-primary hover:bg-primary-muted hover:text-primary-hover">
               <LogOut className="w-5 h-5" />
               <span>Sign Out</span>
             </Button>
@@ -147,7 +147,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600">Log out</DropdownMenuItem>
+                  <DropdownMenuItem className="text-primary">Log out</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -162,3 +162,4 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     </SidebarProvider>
   )
 }
+

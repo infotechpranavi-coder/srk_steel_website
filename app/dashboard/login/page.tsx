@@ -105,7 +105,7 @@ export default function DashboardLogin() {
             <CardFooter className="flex flex-col gap-4 pb-8">
               <Button 
                 type="submit" 
-                className="w-full h-14 bg-primary hover:bg-red-700 text-white rounded-none text-lg font-bold group"
+                className="w-full h-14 bg-primary hover:bg-primary-hover text-white rounded-none text-lg font-bold group"
                 disabled={isLoading}
               >
                 {isLoading ? "Authenticating..." : "Establish Connection"}
@@ -126,3 +126,4 @@ export default function DashboardLogin() {
     </div>
   )
 }
+

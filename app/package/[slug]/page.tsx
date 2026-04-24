@@ -165,7 +165,7 @@ export default function ProductDetailPage() {
                    <div className="px-4 py-2 bg-gray-50 border border-gray-200 text-sm font-medium text-gray-700">
                       ID: {product.slug.toUpperCase()}
                    </div>
-                   <div className="px-4 py-2 bg-red-50 border border-red-100 text-sm font-bold text-primary italic">
+                   <div className="px-4 py-2 bg-primary-muted border border-primary-muted text-sm font-bold text-primary italic">
                       In Stock
                    </div>
                 </div>
@@ -205,7 +205,7 @@ export default function ProductDetailPage() {
                       <p className="text-xs text-gray-400">Every batch is tested and certified for structural safety and compliance.</p>
                     </div>
                   </div>
-                  <Button className="w-full bg-primary hover:bg-red-700 text-white rounded-none h-14 text-lg font-bold">
+                  <Button className="w-full bg-primary hover:bg-primary-hover text-white rounded-none h-14 text-lg font-bold">
                     REQUEST FOR QUOTE
                   </Button>
                 </div>

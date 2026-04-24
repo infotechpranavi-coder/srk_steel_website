@@ -149,7 +149,7 @@ export default function BannersPage() {
 
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-primary hover:bg-red-700 text-white rounded-none h-12 px-8">
+            <Button className="bg-primary hover:bg-primary-hover text-white rounded-none h-12 px-8">
               <Plus className="w-4 h-4 mr-2" /> Add Hero Banner
             </Button>
           </DialogTrigger>
@@ -212,7 +212,7 @@ export default function BannersPage() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-              <Button onClick={handleCreate} disabled={saving} className="bg-primary hover:bg-red-700 text-white">
+              <Button onClick={handleCreate} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
                 {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                 Add Banner
               </Button>
@@ -312,7 +312,7 @@ export default function BannersPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-            <Button onClick={handleUpdate} disabled={saving} className="bg-primary hover:bg-red-700 text-white">
+            <Button onClick={handleUpdate} disabled={saving} className="bg-primary hover:bg-primary-hover text-white">
               {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
               Update Banner
             </Button>
@@ -322,3 +322,4 @@ export default function BannersPage() {
     </div>
   )
 }
+
