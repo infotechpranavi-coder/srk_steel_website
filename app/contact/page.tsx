@@ -1,15 +1,51 @@
-"use client"
-
-import { motion } from "framer-motion"
-import { Clock, Mail, MapPin, Phone } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { PageHero } from "@/components/PageHero"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
+import { toast } from "sonner"
 
 export default function ContactPage() {
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+    message: ""
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.company ? `Inquiry from ${formData.company}` : "General Inquiry",
+          message: formData.message
+        })
+      })
+
+      const json = await res.json()
+      if (json.success) {
+        toast.success("Message sent successfully! We'll get back to you soon.")
+        setFormData({ firstName: "", lastName: "", email: "", phone: "", company: "", message: "" })
+      } else {
+        toast.error(json.error || "Failed to send message.")
+      }
+    } catch (e) {
+      toast.error("An error occurred. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
   return (
     <div>
 
@@ -26,51 +62,56 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-              <p className="text-gray-600 mb-8 leading-relaxed">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 uppercase tracking-tight italic">Send Us a Message</h2>
+              <p className="text-gray-600 mb-8 leading-relaxed italic border-l-2 border-primary/20 pl-6">
                 Fill out the form below and our team will get back to you within 24 hours.
               </p>
 
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                    <Input placeholder="John" className="rounded-none border-gray-300 h-12" />
+                    <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">First Name *</label>
+                    <Input name="firstName" value={formData.firstName} onChange={handleChange} required placeholder="John" className="rounded-none border-gray-100 bg-gray-50 h-14 focus:border-primary italic transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                    <Input placeholder="Doe" className="rounded-none border-gray-300 h-12" />
+                    <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">Last Name *</label>
+                    <Input name="lastName" value={formData.lastName} onChange={handleChange} required placeholder="Doe" className="rounded-none border-gray-100 bg-gray-50 h-14 focus:border-primary italic transition-all" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <Input type="email" placeholder="john@example.com" className="rounded-none border-gray-300 h-12" />
+                  <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">Email Address *</label>
+                  <Input name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="john@example.com" className="rounded-none border-gray-100 bg-gray-50 h-14 focus:border-primary italic transition-all" />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                  <Input type="tel" placeholder="+1 (555) 123-4567" className="rounded-none border-gray-300 h-12" />
+                  <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">Phone Number *</label>
+                  <Input name="phone" type="tel" value={formData.phone} onChange={handleChange} required placeholder="+1 (555) 123-4567" className="rounded-none border-gray-100 bg-gray-50 h-14 focus:border-primary italic transition-all" />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Company (Optional)</label>
-                  <Input placeholder="Your Company Name" className="rounded-none border-gray-300 h-12" />
+                  <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">Company (Optional)</label>
+                  <Input name="company" value={formData.company} onChange={handleChange} placeholder="Your Company Name" className="rounded-none border-gray-100 bg-gray-50 h-14 focus:border-primary italic transition-all" />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Project Details</label>
+                  <label className="block text-[10px] font-black text-gray-400 mb-2 uppercase tracking-widest">Project Details *</label>
                   <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
                     placeholder="Tell us about your project requirements..."
-                    className="rounded-none border-gray-300 min-h-[150px] resize-none"
+                    className="rounded-none border-gray-100 bg-gray-50 min-h-[150px] resize-none focus:border-primary italic transition-all"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary-hover text-white rounded-none h-14 text-lg"
+                  disabled={loading}
+                  className="w-full bg-primary hover:bg-neutral-900 text-white rounded-none h-16 text-lg font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-primary/20"
                 >
-                  Submit Request
+                  {loading ? "PROCESSING..." : "SUBMIT REQUEST"}
                 </Button>
               </form>
             </motion.div>

@@ -52,10 +52,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     { name: "Banners", href: "/dashboard/banners", icon: ImageIcon },
     { name: "Products", href: "/dashboard/products", icon: Package },
     { name: "Categories", href: "/dashboard/categories", icon: Tags },
-    { name: "Services", href: "/dashboard/services", icon: Truck },
-    { name: "Projects", href: "/dashboard/projects", icon: Building2 },
     { name: "Customers", href: "/dashboard/customers", icon: Users },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ]
 
   return (
