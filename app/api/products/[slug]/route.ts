@@ -21,8 +21,8 @@ export async function GET(
   }
 }
 
-// PATCH /api/products/[slug] — update a product
-export async function PATCH(
+// PUT /api/products/[slug] — update a product
+export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
@@ -38,7 +38,10 @@ export async function PATCH(
       if (val !== null) updates[field] = val
     })
 
-    // Handle new image
+    const showInFooter = formData.get("showInFooter")
+    if (showInFooter !== null) updates.showInFooter = showInFooter === "true"
+
+    // Handle new main image
     const imageFile = formData.get("image") as File | null
     if (imageFile && imageFile.size > 0) {
       const existing = await Product.findOne({ slug }).select("image").lean() as any
@@ -50,6 +53,23 @@ export async function PATCH(
       const safeFilename = imageFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")
       const imageData = await uploadToCloudinary(buffer, safeFilename, "products")
       updates.image = imageData
+    }
+
+    // Handle new gallery images
+    const galleryFiles = formData.getAll("gallery") as File[]
+    if (galleryFiles && galleryFiles.length > 0 && galleryFiles[0].size > 0) {
+      const existing = await Product.findOne({ slug }).select("gallery").lean() as any
+      if (existing?.gallery && existing.gallery.length > 0) {
+        await Promise.all(existing.gallery.map((img: any) => deleteFromCloudinary(img.publicId)))
+      }
+      const uploadPromises = galleryFiles.map(async (file) => {
+        const bytes = await file.arrayBuffer()
+        const buffer = Buffer.from(bytes)
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")
+        return uploadToCloudinary(buffer, safeName, "products/gallery")
+      })
+      const results = await Promise.all(uploadPromises)
+      updates.gallery = results
     }
 
     const product = await Product.findOneAndUpdate({ slug }, updates, { new: true })

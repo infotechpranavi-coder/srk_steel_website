@@ -12,11 +12,13 @@ import {
   Menu,
   Building2,
   Tags,
-  ImageIcon
+  ImageIcon,
+  FileText
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode, useState } from "react"
+// ... (rest of imports)
 import { 
   Sidebar, 
   SidebarContent, 
@@ -52,6 +54,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     { name: "Banners", href: "/dashboard/banners", icon: ImageIcon },
     { name: "Products", href: "/dashboard/products", icon: Package },
     { name: "Categories", href: "/dashboard/categories", icon: Tags },
+    { name: "Blogs", href: "/dashboard/blogs", icon: FileText },
     { name: "Customers", href: "/dashboard/customers", icon: Users },
   ]
 

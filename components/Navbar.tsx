@@ -24,7 +24,10 @@ import {
   Container,
   Component,
   Hash,
-  Activity
+  Activity,
+  Facebook,
+  Instagram,
+  Linkedin
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -85,7 +88,7 @@ export function Navbar() {
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
     { name: "Categories", href: "/categories" },
-    { name: "Services", href: "/services" },
+    { name: "Blogs", href: "/blogs" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ]
@@ -98,120 +101,157 @@ export function Navbar() {
   ]
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "shadow-2xl" : ""}`}>
-      {/* MAIN NAV - Logo, Search, Page Tabs */}
-      <div className="bg-white py-2 px-4 md:px-6 border-b border-gray-100">
-        <div className="container mx-auto flex items-center justify-between gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0 group">
-            <div className="relative w-40 h-16 md:w-64 md:h-20 transform group-hover:scale-105 transition-transform duration-300">
-              <Image 
-                src="/srk_steel%20logo.jpeg"
-                alt="SRK Steel Logo"
-                fill
-                className="object-contain object-left"
-                priority
-              />
-            </div>
-          </Link>
-
-          {/* Search Bar - Desktop */}
-          <div className="hidden lg:flex flex-1 max-w-md relative">
-            <form onSubmit={handleSearch} className="w-full relative group">
-              <input
-                type="text"
-                placeholder="Search by product name, grade, standard..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border-2 border-gray-100 px-6 pr-12 h-14 text-sm font-medium focus:ring-0 focus:border-primary outline-none transition-all rounded-md italic"
-              />
-              <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-primary transition-colors">
-                <Search className="w-5 h-5" />
-              </button>
-            </form>
+    <motion.header 
+      initial={false}
+      animate={{ y: scrolled ? -40 : 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 right-0 z-50"
+    >
+      {/* 1. TOP BAR */}
+      <div className="bg-[#a02222] text-white h-[40px] flex items-center overflow-hidden hidden lg:block">
+        <div className="container mx-auto px-4 md:px-6 h-full flex items-center justify-between">
+          {/* Left: Tagline */}
+          <div className="flex items-center gap-2 min-w-[250px]">
+            <Shield className="w-3 h-3 text-[#f8d7da]" />
+            <span className="text-[9px] font-black uppercase tracking-[0.2em]">Celebrating 10+ Years Excellence</span>
           </div>
 
-          {/* Page Tabs - Desktop (Moved from Top Bar) */}
-          <nav className="hidden lg:flex items-center gap-4">
+          {/* Center: Main Contacts */}
+          <div className="flex items-center gap-8">
+            <Link href="tel:+919152341656" className="flex items-center gap-2 hover:text-white/80 transition-colors">
+              <Phone className="w-3 h-3" />
+              <span className="text-[9px] font-black uppercase tracking-[0.15em]">+91 91523 41656</span>
+            </Link>
+            <Link href="https://wa.me/919152341656" className="flex items-center gap-2 hover:text-white/80 transition-colors">
+              <MessageCircle className="w-3 h-3" />
+              <span className="text-[9px] font-black uppercase tracking-[0.15em]">Direct Message Us</span>
+            </Link>
+          </div>
+
+          {/* Right: Social Media */}
+          <div className="flex items-center gap-5 min-w-[250px] justify-end">
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/50 mr-2">Follow Us</span>
+            <Link href="#" className="hover:text-[#f8d7da] transition-colors"><Facebook className="w-3.5 h-3.5" /></Link>
+            <Link href="#" className="hover:text-[#f8d7da] transition-colors"><Instagram className="w-3.5 h-3.5" /></Link>
+            <Link href="#" className="hover:text-[#f8d7da] transition-colors"><Linkedin className="w-3.5 h-3.5" /></Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. MAIN NAV - Sticky */}
+      <div className={`transition-all duration-300 bg-white ${scrolled ? "shadow-2xl border-b border-gray-100" : ""}`}>
+        <div className="container mx-auto flex items-center">
+          {/* Logo - Left part */}
+          <div className="flex justify-start">
+            <Link href="/" className="flex items-center gap-1 group">
+              <div className="relative w-40 h-16 md:w-64 md:h-24 flex-shrink-0">
+                <Image 
+                  src="/srk_steel logo - Copy.jpeg"
+                  alt="SRK Steel"
+                  fill
+                  className="object-contain object-left"
+                  priority
+                />
+              </div>
+              <div className="flex flex-col leading-tight -ml-8 md:-ml-12">
+                <h1 className="flex items-center font-black tracking-tighter text-xl md:text-2xl">
+                  <span className="text-[#1a1a1a]">SRK</span>
+                  <span className="text-[#a02222] italic ml-1">STEEL</span>
+                </h1>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Industrial Excellence</p>
+              </div>
+            </Link>
+          </div>
+ 
+          {/* Navigation Tabs - Shifted Right */}
+          <nav className="hidden xl:flex items-center gap-8 ml-24 flex-grow">
             {topLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 className="relative group py-2"
               >
-                <span className={`text-xs font-black uppercase tracking-widest transition-colors ${
-                  pathname === link.href ? "text-primary" : "text-gray-500 hover:text-primary"
+                <span className={`text-[11px] font-black uppercase tracking-widest transition-colors ${
+                  pathname === link.href ? "text-[#a02222]" : "text-gray-400 hover:text-[#a02222]"
                 }`}>
                   {link.name}
                 </span>
-                {pathname === link.href ? (
+                {pathname === link.href && (
                   <motion.div
                     layoutId="activeNavTab"
-                    className="absolute -bottom-1 left-0 right-0 h-1 bg-primary"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#a02222]"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
-                ) : (
-                  <div className="absolute -bottom-1 left-0 w-0 h-1 bg-primary/40 group-hover:w-full transition-all duration-300" />
                 )}
               </Link>
             ))}
           </nav>
 
+          {/* Actions - Right part of the flex container */}
+          <div className="flex-1 hidden lg:flex items-center gap-4 justify-end">
+            {/* Search Bar */}
+            <div className="relative group">
+              <form onSubmit={handleSearch} className="flex items-center bg-gray-50 px-4 h-12 rounded-sm border border-gray-100 focus-within:border-[#a02222]/30 transition-all">
+                <Search className="w-4 h-4 text-gray-400 mr-3" />
+                <input
+                  type="text"
+                  placeholder="SEARCH CATALOGUE..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent text-[10px] font-bold outline-none italic w-48 uppercase tracking-wider"
+                />
+              </form>
+            </div>
+
+            {/* Get a Quote Button */}
+            <Link href="/contact">
+              <Button className="bg-[#a02222] hover:bg-[#801b1b] text-white rounded-none px-6 h-12 font-black text-[11px] flex items-center gap-3 uppercase tracking-wider shadow-lg shadow-[#a02222]/20">
+                GET A QUOTE <ChevronRight className="w-4 h-4 stroke-[3px]" />
+              </Button>
+            </Link>
+          </div>
+
           {/* Mobile Toggle */}
-          <button className="lg:hidden p-2 text-[#1a1a1a]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="xl:hidden p-2 text-[#1a1a1a] ml-auto" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
           </button>
         </div>
       </div>
 
-      {/* 3. CATEGORY BAR - All Products & Quick Categories */}
-      <div className="hidden lg:block bg-primary text-white py-3 shadow-inner">
-        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link 
-              href="/products" 
-              className="group flex items-center gap-2 px-6 py-1 border-r border-white/20 mr-4 hover:text-white/80 transition-colors"
-            >
-              <span className="text-[11px] font-black uppercase tracking-[0.2em]">All Products</span>
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <nav className="flex items-center gap-8">
-              {categories.slice(0, 8).map((cat) => {
-                const Icon = CATEGORY_ICONS[cat.name] || Component
-                return (
-                  <div key={cat._id} className="relative group">
-                    <Link
-                      href={`/categories/${cat.slug}`}
-                      className="flex items-center gap-2 text-[10px] font-black text-white/90 hover:text-white uppercase tracking-[0.15em] transition-all py-1.5"
-                    >
-                      <Icon className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
-                      {cat.name}
-                      {cat.subcategories && cat.subcategories.length > 0 && (
-                        <ChevronDown className="w-3 h-3 opacity-50 group-hover:opacity-100" />
-                      )}
-                    </Link>
-                    
-                    {/* Submenu */}
-                    {cat.subcategories && cat.subcategories.length > 0 && (
-                      <div className="absolute top-full left-0 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
-                        <div className="bg-white border border-gray-100 shadow-2xl p-3 min-w-[220px] rounded-lg">
-                          {cat.subcategories.map((sub: any) => (
-                            <Link
-                              key={sub.name}
-                              href={`/categories/${cat.slug}?sub=${sub.slug}`}
-                              className="block text-[10px] font-bold text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md px-4 py-3 transition-all uppercase tracking-widest border-b border-gray-50 last:border-0"
-                            >
-                              {sub.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+      {/* 3. CATEGORY BAR - All Products & Quick Categories - RED BAR */}
+      <div className="hidden lg:block bg-[#a02222] text-white py-2 border-t border-white/10">
+        <div className="container mx-auto px-4 md:px-6 flex items-center justify-center">
+          <div className="flex items-center gap-12">
+            {categories.slice(0, 6).map((cat) => (
+              <div key={cat._id} className="relative group">
+                <Link
+                  href={`/categories/${cat.slug}`}
+                  className="flex items-center gap-2 text-[11px] font-black text-white hover:bg-white/10 px-3 py-1.5 uppercase tracking-[0.25em] transition-all whitespace-nowrap"
+                >
+                  {cat.name}
+                  {cat.subcategories && cat.subcategories.length > 0 && (
+                    <ChevronDown className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100" />
+                  )}
+                </Link>
+                
+                {/* Submenu */}
+                {cat.subcategories && cat.subcategories.length > 0 && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                    <div className="bg-white border border-gray-100 shadow-2xl p-2 min-w-[200px] rounded-sm">
+                      {cat.subcategories.map((sub: any) => (
+                        <Link
+                          key={sub.name}
+                          href={`/categories/${cat.slug}?sub=${sub.slug}`}
+                          className="block text-[9px] font-black text-gray-600 hover:text-[#a02222] hover:bg-gray-50 px-4 py-2.5 transition-all uppercase tracking-[0.15em]"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                )
-              })}
-            </nav>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -227,14 +267,20 @@ export function Navbar() {
           >
             {/* Mobile Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-               <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center">
-                <div className="relative w-40 h-16">
+               <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-1">
+                <div className="relative w-32 h-12">
                   <Image 
-                    src="/srk_steel%20logo.jpeg"
-                    alt="SRK Steel Logo"
+                    src="/srk_steel logo - Copy.jpeg"
+                    alt="SRK Steel"
                     fill
-                    className="object-contain object-left"
+                    className="object-contain"
                   />
+                </div>
+                <div className="flex flex-col leading-none -ml-4">
+                  <h1 className="flex items-center font-black tracking-tighter text-lg">
+                    <span className="text-[#1a1a1a]">SRK</span>
+                    <span className="text-[#a02222] italic ml-1">STEEL</span>
+                  </h1>
                 </div>
               </Link>
               <button onClick={() => setIsMenuOpen(false)} className="p-2"><X className="w-8 h-8" /></button>
@@ -297,6 +343,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { 
-  Plus, Search, Filter, MoreVertical, Edit, Trash2, ExternalLink, Upload, ArrowRight, Loader2
+  Plus, Search, Filter, MoreVertical, Edit, Trash2, ExternalLink, Upload, ArrowRight, Loader2, X, ImageIcon
 } from "lucide-react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
@@ -43,17 +43,20 @@ export default function DashboardProducts() {
 
   // Form state
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [saving, setSaving] = useState(false)
   const [formTitle, setFormTitle] = useState("")
   const [selectedMainCategory, setSelectedMainCategory] = useState("")
   const [selectedSubCategory, setSelectedSubCategory] = useState("")
-  const [formSpecs, setFormSpecs] = useState("")
+  const [formSpecList, setFormSpecList] = useState<string[]>([""])
   const [formPrice, setFormPrice] = useState("")
   const [formStock, setFormStock] = useState("")
   const [formDescription, setFormDescription] = useState("")
   const [formShowInFooter, setFormShowInFooter] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [galleryPreview, setGalleryPreview] = useState<string[]>([])
   const fileRef = useRef<HTMLInputElement>(null)
+  const galleryRef = useRef<HTMLInputElement>(null)
 
   // Fetch categories and products
   const fetchAll = useCallback(async () => {
@@ -81,13 +84,39 @@ export default function DashboardProducts() {
     if (file) setImagePreview(URL.createObjectURL(file))
   }
 
-    const resetForm = () => {
-    setFormTitle(""); setFormSpecs(""); setFormDescription("")
+  const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files) {
+      const urls = Array.from(files).map(f => URL.createObjectURL(f))
+      setGalleryPreview(urls)
+    }
+  }
+
+  const resetForm = () => {
+    setFormTitle(""); setFormSpecList([""]); setFormDescription("")
     setFormPrice(""); setFormStock("")
     setSelectedMainCategory(""); setSelectedSubCategory("")
     setFormShowInFooter(false)
     setImagePreview(null)
+    setGalleryPreview([])
+    setEditingProduct(null)
     if (fileRef.current) fileRef.current.value = ""
+    if (galleryRef.current) galleryRef.current.value = ""
+  }
+
+  const handleEdit = (p: Product) => {
+    setEditingProduct(p)
+    setFormTitle(p.title)
+    setSelectedMainCategory(p.mainCategory)
+    setSelectedSubCategory(p.subCategory)
+    setFormSpecList(p.specs ? p.specs.split(" | ") : [""])
+    setFormPrice(p.price)
+    setFormStock(p.stock)
+    setFormDescription((p as any).description || "")
+    setFormShowInFooter((p as any).showInFooter || false)
+    setImagePreview(p.image?.url || null)
+    setGalleryPreview(p.gallery?.map((img: any) => img.url) || [])
+    setIsDialogOpen(true)
   }
 
   const handleSubmit = async () => {
@@ -98,17 +127,33 @@ export default function DashboardProducts() {
       fd.append("title", formTitle)
       fd.append("mainCategory", selectedMainCategory)
       fd.append("subCategory", selectedSubCategory)
-      fd.append("specs", formSpecs)
+      fd.append("specs", formSpecList.filter(s => s.trim()).join(" | "))
       fd.append("description", formDescription)
       fd.append("price", formPrice)
       fd.append("stock", formStock)
       fd.append("showInFooter", formShowInFooter.toString())
-      if (fileRef.current?.files?.[0]) fd.append("image", fileRef.current.files[0])
+      
+      if (fileRef.current?.files?.[0]) {
+        fd.append("image", fileRef.current.files[0])
+      }
 
-      const res = await fetch("/api/products", { method: "POST", body: fd })
+      if (galleryRef.current?.files) {
+        Array.from(galleryRef.current.files).forEach(file => {
+          fd.append("gallery", file)
+        })
+      }
+
+      const url = editingProduct ? `/api/products/${editingProduct.slug}` : "/api/products"
+      const method = editingProduct ? "PUT" : "POST"
+
+      const res = await fetch(url, { method, body: fd })
       const json = await res.json()
       if (json.success) {
-        setProducts(prev => [json.data, ...prev])
+        if (editingProduct) {
+          setProducts(prev => prev.map(p => p._id === json.data._id ? json.data : p))
+        } else {
+          setProducts(prev => [json.data, ...prev])
+        }
         setIsDialogOpen(false)
         resetForm()
       }
@@ -198,16 +243,58 @@ export default function DashboardProducts() {
                 </div>
               </div>
 
-              {/* Row 3: Specs + Stock */}
+              {/* Technical Specifications - Dynamic Points */}
+              <div className="space-y-4 bg-gray-50 p-4 border border-gray-100">
+                <div className="flex justify-between items-center">
+                  <Label className="text-[#1a1a1a] font-bold uppercase tracking-tight text-xs">Technical Specifications</Label>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-primary hover:text-primary-hover font-black uppercase text-[10px]"
+                    onClick={() => setFormSpecList([...formSpecList, ""])}
+                  >
+                    <Plus className="w-3 h-3 mr-1" /> Add Point
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {formSpecList.map((spec, index) => (
+                    <div key={index} className="flex gap-2 group">
+                      <Input 
+                        value={spec} 
+                        onChange={(e) => {
+                          const newList = [...formSpecList]
+                          newList[index] = e.target.value
+                          setFormSpecList(newList)
+                        }}
+                        placeholder={`e.g. Grade: IS 2062 (Point ${index + 1})`}
+                        className="rounded-none border-gray-200 bg-white"
+                      />
+                      <Button 
+                        type="button"
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => setFormSpecList(formSpecList.filter((_, i) => i !== index))}
+                        className="text-gray-300 hover:text-primary transition-colors h-10 w-10 shrink-0"
+                        disabled={formSpecList.length === 1}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Row 3: Stock + Price (Combined) */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="specs">Technical Specifications</Label>
-                  <Input id="specs" value={formSpecs} onChange={e => setFormSpecs(e.target.value)} placeholder="e.g. Grade: IS 2062 | Size: 10mm" className="rounded-none border-gray-200" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="stock">Stock Level</Label>
-                  <Input id="stock" value={formStock} onChange={e => setFormStock(e.target.value)} placeholder="e.g. 500 Tons" className="rounded-none border-gray-200" />
-                </div>
+                 <div className="space-y-2">
+                   <Label htmlFor="stock">Stock Level</Label>
+                   <Input id="stock" value={formStock} onChange={e => setFormStock(e.target.value)} placeholder="e.g. 500 Tons" className="rounded-none border-gray-200" />
+                 </div>
+                 <div className="space-y-2">
+                   <Label htmlFor="price">Base Price</Label>
+                   <Input id="price" value={formPrice} onChange={e => setFormPrice(e.target.value)} placeholder="e.g. ₹55,000/Ton" className="rounded-none border-gray-200" />
+                 </div>
               </div>
 
               {/* Description & Footer Toggle */}
@@ -227,26 +314,51 @@ export default function DashboardProducts() {
                 </div>
               </div>
 
-              {/* Image Upload */}
-              <div className="space-y-2">
-                <Label>Product Image → Cloudinary</Label>
-                <div
-                  className="border-2 border-dashed border-gray-200 p-6 text-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group"
-                  onClick={() => fileRef.current?.click()}
-                >
-                  {imagePreview ? (
-                    <div className="relative h-36 w-full">
-                      <Image src={imagePreview} alt="Preview" fill className="object-contain" />
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center gap-2">
-                      <Upload className="w-10 h-10 text-gray-400 group-hover:text-primary transition-colors" />
-                      <p className="text-sm text-gray-600 font-medium tracking-tight">Click to upload or drag and drop</p>
-                      <p className="text-xs text-gray-400 uppercase tracking-widest">JPG, PNG, WEBP up to 10MB</p>
-                    </div>
-                  )}
+              {/* Image Upload - Main & Gallery */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Featured Image (Main)</Label>
+                  <div
+                    className="border-2 border-dashed border-gray-200 p-6 text-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group h-[140px] flex items-center justify-center overflow-hidden"
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    {imagePreview ? (
+                      <div className="relative h-full w-full">
+                        <Image src={imagePreview} alt="Preview" fill className="object-contain" />
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-1">
+                        <Upload className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
+                        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Main Photo</p>
+                      </div>
+                    )}
+                  </div>
+                  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
                 </div>
-                <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+
+                <div className="space-y-2">
+                  <Label>Gallery Photos (Optional)</Label>
+                  <div
+                    className="border-2 border-dashed border-gray-200 p-6 text-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group h-[140px] overflow-y-auto"
+                    onClick={() => galleryRef.current?.click()}
+                  >
+                    {galleryPreview.length > 0 ? (
+                      <div className="grid grid-cols-3 gap-1">
+                        {galleryPreview.map((url, i) => (
+                          <div key={i} className="relative aspect-square bg-white border border-gray-100">
+                            <Image src={url} alt={`Gallery ${i}`} fill className="object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-1">
+                        <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
+                        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Gallery</p>
+                      </div>
+                    )}
+                  </div>
+                  <input ref={galleryRef} type="file" accept="image/*" multiple className="hidden" onChange={handleGalleryChange} />
+                </div>
               </div>
             </div>
             <DialogFooter>
@@ -331,7 +443,7 @@ export default function DashboardProducts() {
                       </div>
                       <div>
                         <div className="font-bold text-gray-900 group-hover:text-primary transition-colors">{product.title}</div>
-                        <div className="text-xs text-gray-500 uppercase tracking-widest">{product.specs}</div>
+                        <div className="text-xs text-gray-500 uppercase tracking-widest truncate max-w-[300px]">{product.specs}</div>
                       </div>
                     </div>
                   </TableCell>
@@ -365,7 +477,7 @@ export default function DashboardProducts() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end items-center gap-1">
-                      <Button variant="ghost" size="icon" className="hover:text-primary transition-colors">
+                      <Button variant="ghost" size="icon" className="hover:text-primary transition-colors" onClick={() => handleEdit(product)}>
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button variant="ghost" size="icon" className="hover:text-primary transition-colors" onClick={() => handleDelete(product.slug)}>
@@ -405,38 +517,6 @@ export default function DashboardProducts() {
         </div>
       </Card>
 
-      {/* Quick Actions Footer */}
-      <div className="py-8 border-t border-gray-100">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 bg-primary text-white space-y-3">
-            <h3 className="font-bold text-lg uppercase tracking-wider">Bulk Import</h3>
-            <p className="text-white/80 text-sm">Upload CSV or Excel files to update multiple product prices or stocks instantly.</p>
-            <Button variant="outline" className="bg-transparent border-white hover:bg-white hover:text-primary rounded-none w-full h-11 font-bold">
-              Open Bulk Tool
-            </Button>
-          </div>
-          <div className="p-6 bg-gray-900 text-white space-y-3">
-            <h3 className="font-bold text-lg uppercase tracking-wider">Sync Inventory</h3>
-            <p className="text-white/80 text-sm">Last synced: Today. Connect your ERP systems for automated updates.</p>
-            <Button variant="outline" className="bg-transparent border-gray-700 hover:bg-gray-800 rounded-none w-full h-11 font-bold text-white">
-              Run Manual Sync
-            </Button>
-          </div>
-          <div className="p-6 bg-white border border-gray-100 shadow-sm space-y-3">
-            <h3 className="font-bold text-lg uppercase tracking-wider text-gray-900">Site Status</h3>
-            <div className="flex items-center gap-2 text-green-600 font-bold text-sm">
-              <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
-              LIVE CATALOGUE ACTIVE
-            </div>
-            <p className="text-gray-500 text-sm">Changes made here reflect on the public website.</p>
-            <Button variant="link" className="p-0 text-primary h-auto font-bold group" asChild>
-              <Link href="/products">
-                Visit Website <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

@@ -1,5 +1,13 @@
+"use client"
+
 import { useState } from "react"
 import { toast } from "sonner"
+import { motion } from "framer-motion"
+import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { PageHero } from "@/components/PageHero"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false)

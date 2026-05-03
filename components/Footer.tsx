@@ -28,7 +28,7 @@ export function Footer() {
 
   return (
     <footer className="bg-[#222222] border-t border-white/10 pt-24 pb-12">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
           <div className="space-y-6">
             <Link href="/" className="block group">
@@ -49,11 +49,11 @@ export function Footer() {
 
           <div>
             <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Industrial Products</h4>
-            <ul className="space-y-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+            <ul className="space-y-4 text-[11px] font-black text-gray-300 uppercase tracking-[0.15em]">
               {footerProducts.length > 0 ? (
                 footerProducts.map(product => (
                   <li key={product._id}>
-                    <Link href={`/package/${product.slug}`} className="hover:text-primary transition-colors">
+                    <Link href={`/package/${product.slug}`} className="hover:text-white transition-colors">
                       {product.title}
                     </Link>
                   </li>
@@ -68,34 +68,34 @@ export function Footer() {
 
           <div>
             <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Explore Site</h4>
-            <ul className="space-y-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+            <ul className="space-y-4 text-[11px] font-black text-gray-300 uppercase tracking-[0.15em]">
               <li>
-                <Link href="/" className="hover:text-primary transition-colors">
+                <Link href="/" className="hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="hover:text-primary transition-colors">
+                <Link href="/products" className="hover:text-white transition-colors">
                   Products
                 </Link>
               </li>
               <li>
-                <Link href="/categories" className="hover:text-primary transition-colors">
+                <Link href="/categories" className="hover:text-white transition-colors">
                   Categories
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-primary transition-colors">
+                <Link href="/services" className="hover:text-white transition-colors">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-primary transition-colors">
+                <Link href="/about" className="hover:text-white transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-primary transition-colors">
+                <Link href="/contact" className="hover:text-white transition-colors">
                   Contact
                 </Link>
               </li>
@@ -104,7 +104,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-black text-primary mb-8 uppercase tracking-[0.3em] text-[10px]">Get in Touch</h4>
-            <ul className="space-y-5 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+            <ul className="space-y-5 text-[11px] font-black text-gray-300 uppercase tracking-[0.15em]">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                 <span className="leading-relaxed">123 Industrial Area, Phase 4, Steel City, SC 54321</span>

@@ -55,6 +55,21 @@ export async function POST(req: NextRequest) {
       imageData = await uploadToCloudinary(buffer, safeFilename, "products")
     }
 
+    // Handle Gallery images
+    const galleryFiles = formData.getAll("gallery") as File[]
+    const galleryData = []
+    if (galleryFiles && galleryFiles.length > 0) {
+      const uploadPromises = galleryFiles.map(async (file) => {
+        if (file.size === 0) return null
+        const bytes = await file.arrayBuffer()
+        const buffer = Buffer.from(bytes)
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")
+        return uploadToCloudinary(buffer, safeName, "products/gallery")
+      })
+      const results = await Promise.all(uploadPromises)
+      galleryData.push(...results.filter(r => r !== null))
+    }
+
     const product = await Product.create({
       title,
       slug,
@@ -65,6 +80,7 @@ export async function POST(req: NextRequest) {
       price: price || "",
       stock: stock || "",
       image: imageData,
+      gallery: galleryData,
       showInFooter,
     })
 
