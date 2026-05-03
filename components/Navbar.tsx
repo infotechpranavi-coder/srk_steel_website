@@ -51,30 +51,19 @@ const CATEGORY_ICONS: Record<string, any> = {
   "Screws": Wrench,
 }
 
-export function Navbar() {
+export function Navbar({ initialCategories = [] }: { initialCategories?: Category[] }) {
   const pathname = usePathname()
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories] = useState<Category[]>(initialCategories)
   const [searchQuery, setSearchQuery] = useState("")
   const [scrolled, setScrolled] = useState(false)
 
-  const fetchCategories = useCallback(async () => {
-    try {
-      const res = await fetch("/api/categories")
-      const json = await res.json()
-      if (json.success) setCategories(json.data)
-    } catch (e) {
-      console.error(e)
-    }
-  }, [])
-
   useEffect(() => {
-    fetchCategories()
     const handleScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [fetchCategories])
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()

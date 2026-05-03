@@ -30,16 +30,27 @@ export const metadata: Metadata = {
 }
 
 import { SiteWrapper } from "@/components/SiteWrapper"
+import connectDB from "@/lib/mongodb"
+import { Category } from "@/lib/models/Category"
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  let categories = []
+  try {
+    await connectDB()
+    const rawCategories = await Category.find({}).sort({ name: 1 }).lean()
+    categories = JSON.parse(JSON.stringify(rawCategories))
+  } catch (error) {
+    console.error("Failed to fetch global categories:", error)
+  }
+
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        <SiteWrapper>
+        <SiteWrapper categories={categories}>
           {children}
           <Analytics />
         </SiteWrapper>
